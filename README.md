@@ -48,7 +48,6 @@ Pinglet (a portmanteau of "ping" + "-let") means **"a tiny, cute message"** — 
 
 ### 🔒 Account & Safety
 - Firebase Email/Password authentication
-- Block users (hidden from chat list, cannot be opened)
 - Delete a one-on-one conversation from your account
 - Demo/offline mode with local simulated replies when Firebase is unavailable
 
