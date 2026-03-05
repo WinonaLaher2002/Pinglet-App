@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinglet</title>
+<link rel="icon" href="assets/header.png">
+<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="fl" style="left:6%;animation-duration:13s;animation-delay:0s">🌸</div>
+<div class="fl" style="left:20%;animation-duration:18s;animation-delay:3s">💗</div>
+<div class="fl" style="left:42%;animation-duration:11s;animation-delay:5s">🌷</div>
+<div class="fl" style="left:65%;animation-duration:16s;animation-delay:1.5s">✨</div>
+<div class="fl" style="left:84%;animation-duration:21s;animation-delay:8s">🌸</div>
+<div class="fl" style="left:33%;animation-duration:15s;animation-delay:11s">💕</div>
+
+<div class="phone">
+
+<!-- ══ LOGIN ══ -->
+<div class="screen active" id="loginScreen">
+  <div class="logo-area">
+    <img src="assets/header.png" class="logo-img" alt="Pinglet"
+      onerror="this.style.display='none';document.getElementById('logoFb').style.display='block'">
+    <div id="logoFb" style="display:none;font-size:34px;color:var(--text);letter-spacing:2px;font-weight:400;">🩷 Pinglet</div>
+    <div class="logo-tagline">connect in a ping ♡</div>
+  </div>
+  <div class="tab-toggle">
+    <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+    <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+  </div>
+  <div class="fs vis" id="loginForm">
+    <div class="fg"><label class="fl-label">Email ✉</label>
+      <input type="email" class="gi" id="loginEmail" placeholder="you@example.com"></div>
+    <div class="fg"><label class="fl-label">Password 🔒</label>
+      <input type="password" class="gi" id="loginPass" placeholder="••••••••"></div>
+    <div class="err" id="loginErr"></div>
+    <button class="btn-p" onclick="doLogin()">Login ♡</button>
+  </div>
+  <div class="fs" id="signupForm">
+    <div class="fg"><label class="fl-label">Username 🌸</label>
+      <input type="text" class="gi" id="suUser" placeholder="sweetuser123"></div>
+    <div class="fg"><label class="fl-label">Email ✉</label>
+      <input type="email" class="gi" id="suEmail" placeholder="you@example.com"></div>
+    <div class="fg"><label class="fl-label">Password 🔒</label>
+      <input type="password" class="gi" id="suPass" placeholder="min 6 characters"></div>
+    <div class="err" id="signupErr"></div>
+    <button class="btn-p" onclick="doSignup()">Create Account 🌷</button>
+  </div>
+</div>
+
+<!-- ══ CHAT LIST ══ -->
+<div class="screen" id="chatListScreen">
+  <div class="topbar">
+    <img src="assets/header.png" class="topbar-logo" alt="Pinglet"
+      onerror="this.outerHTML='<span style=\'font-size:20px;color:var(--text);font-weight:400;\'>🩷 Pinglet</span>'">
+    <div class="topbar-acts">
+      <div class="ib" onclick="toggleSearch()" title="Search">🔍</div>
+      <div class="ib" onclick="go('settingsScreen')" title="Settings">⚙️</div>
+    </div>
+  </div>
+  <div class="search-bar" id="searchBar">
+    <div class="sw">
+      <span class="si">🔍</span>
+      <input class="gi" style="padding-left:36px;padding-top:10px;padding-bottom:10px;"
+        placeholder="Search..." id="searchInput" oninput="filterChats(this.value)">
+    </div>
+  </div>
+  <div class="ncr" onclick="openModal()">
+    <div class="pc">＋</div>New Chat
+  </div>
+  <div class="chat-list" id="chatList"></div>
+
+  <!-- NEW CHAT MODAL -->
+  <div class="mo" id="ncModal" onclick="closeModalOut(event)">
+    <div class="ms">
+      <div class="mh"></div>
+      <div class="mt2">New Chat 💬</div>
+      <div class="fg">
+        <label class="fl-label">Username or Email</label>
+        <input type="text" class="gi" id="ncUser" placeholder="find someone...">
+        <div class="field-hint">For group: separate usernames with a comma. Type a group name to rejoin if you left.</div>
+      </div>
+      <button class="btn-p" onclick="startChat()" style="margin-top:4px;">Start Chatting ♡</button>
+      <button class="btn-g" onclick="createGroupChat()">Create Group Chat 👥</button>
+      <button class="btn-g" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHAT ROOM ══ -->
+<div class="screen" id="chatRoomScreen">
+  <div class="chat-topbar">
+    <div class="back" onclick="goBack()">←</div>
+    <div class="av av1" id="cav" style="width:40px;height:40px;font-size:18px;">🌸</div>
+    <div class="cp2">
+      <div class="cpn" id="cpn">Chat</div>
+    </div>
+    <div class="ib" id="chatMenuBtn">⋮</div>
+  </div>
+  <div class="ma" id="ma">
+    <div class="dd">Today 🌸</div>
+    <div class="msg in" id="typEl" style="display:none;">
+      <div class="typ">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+    </div>
+  </div>
+  <div class="ia">
+    <input type="file" id="chatMediaInput" accept="image/*,video/*" style="display:none" onchange="handleChatMediaUpload(event)">
+    <button class="sb sb-attach" onclick="triggerMediaUpload()" title="Send photo/video">📎</button>
+    <textarea class="mi2" id="msgIn" placeholder="say something cute... 🌸"
+      rows="1" onkeydown="hk(event)" oninput="ar(this)"></textarea>
+    <button class="sb" onclick="send()">➤</button>
+  </div>
+</div>
+
+<!-- ══ SETTINGS ══ -->
+<div class="screen" id="settingsScreen">
+  <div class="seth">
+    <div class="back" onclick="go('chatListScreen')">←</div>
+    <div class="set-title">Settings ⚙️</div>
+  </div>
+  <div class="setb">
+    <div class="set-card">
+      <div class="pr-area">
+        <div class="pr-av-wrap" onclick="triggerAvatarUpload()" title="Change photo">
+          <div class="pr-av" id="prAv">🌸</div>
+          <div class="pr-av-overlay">📷</div>
+        </div>
+        <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
+        <div class="pr-name" id="prName">sweetuser</div>
+        <div class="pr-email" id="prEmail">user@example.com</div>
+        <div class="pr-change-hint">tap photo to change 📷</div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">Appearance</div>
+    <div class="set-card">
+      <div class="th-wrap">
+        <div class="th-lbl">Color Theme</div>
+        <div class="th-tog">
+          <button class="th-opt active" data-theme-opt="default" onclick="setTheme('default')">Whitey</button>
+          <button class="th-opt" data-theme-opt="warm" onclick="setTheme('warm')">Warm</button>
+          <button class="th-opt" data-theme-opt="mink" onclick="setTheme('mink')">Mink</button>
+          <button class="th-opt" data-theme-opt="green" onclick="setTheme('green')">Gween</button>
+          <button class="th-opt" data-theme-opt="mlue" onclick="setTheme('mlue')">Mlue</button>
+          <button class="th-opt" data-theme-opt="yellow" onclick="setTheme('yellow')">Meowllow</button>
+          <button class="th-opt" data-theme-opt="purple" onclick="setTheme('purple')">Murmle</button>
+          <button class="th-opt" data-theme-opt="brown" onclick="setTheme('brown')">Mrown</button>
+          <button class="th-opt" data-theme-opt="shockoy" onclick="setTheme('shockoy')">Shockoy</button>
+          <button class="th-opt" data-theme-opt="black" onclick="setTheme('black')">Darky</button>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--div);">
+        <div style="padding:11px 17px 5px;font-size:14px;color:var(--muted);">Color Palette</div>
+        <div class="pal-row" id="palRow"></div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">General</div>
+    <div class="set-card">
+      <div class="sr" onclick="go('chatSettingsScreen')">
+        <div class="srl"><div class="sic ic3">💬</div>
+          <div><div class="slbl">Chat Settings</div><div class="ssub">Bubbles &amp; fonts</div></div></div>
+        <div class="chev">›</div>
+      </div>
+      <div class="sr" style="border:none;" onclick="go('aboutScreen')">
+        <div class="srl"><div class="sic ic1">🌸</div>
+          <div><div class="slbl">About Pinglet</div><div class="ssub">Version 1.0</div></div></div>
+        <div class="chev">›</div>
+      </div>
+    </div>
+
+    <button class="lo-btn" onclick="doLogout()">Log Out 👋</button>
+  </div>
+</div>
+
+<!-- ══ CHAT SETTINGS ══ -->
+<div class="screen" id="chatSettingsScreen">
+  <div class="seth">
+    <div class="back" onclick="go('settingsScreen')">←</div>
+    <div class="set-title">Chat Settings 💬</div>
+  </div>
+  <div class="setb">
+    <div class="sec-lbl">Typography</div>
+    <div class="set-card">
+      <div style="padding:15px 17px;">
+        <div class="slbl" style="margin-bottom:10px;">Font Size</div>
+        <div class="font-size-row">
+          <span class="font-demo" style="font-size:13px;">Aa</span>
+          <input type="range" class="slider" id="fontSlider" min="13" max="22" value="16" oninput="updateFontSize(this.value)">
+          <span class="font-demo" style="font-size:22px;">Aa</span>
+        </div>
+        <div class="font-preview" id="fontPreview">Preview text 🌸 How does this look?</div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">Bubble Style</div>
+    <div class="set-card">
+      <div style="padding:14px 17px;display:flex;flex-direction:column;gap:10px;">
+        <div class="bubble-opt" onclick="setBubble('rounded')" id="bub-rounded">
+          <div class="bubble-preview rounded-bub">Rounded bubbles 🌸</div>
+          <div class="bubble-check" id="chk-rounded">✓</div>
+        </div>
+        <div class="bubble-opt" onclick="setBubble('soft')" id="bub-soft">
+          <div class="bubble-preview soft-bub">Soft corners 💕</div>
+          <div class="bubble-check" id="chk-soft" style="opacity:0">✓</div>
+        </div>
+        <div class="bubble-opt" onclick="setBubble('sharp')" id="bub-sharp">
+          <div class="bubble-preview sharp-bub">Sharp corners ✨</div>
+          <div class="bubble-check" id="chk-sharp" style="opacity:0">✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">Wallpaper</div>
+    <div class="set-card">
+      <div style="padding:14px 17px;">
+        <div class="slbl" style="margin-bottom:10px;">Chat Background</div>
+        <div class="wallpaper-grid">
+          <div class="wp-opt active" onclick="setWallpaper('default')" id="wp-default" style="background:linear-gradient(135deg,rgb(255,228,228),rgb(255,208,208))"><span>Default</span></div>
+          <div class="wp-opt" onclick="setWallpaper('stars')"    id="wp-stars"    style="background:#1a1a2e">✨</div>
+          <div class="wp-opt" onclick="setWallpaper('sakura')"   id="wp-sakura"   style="background:linear-gradient(135deg,#ffe4e1,#ffb6c1)">🌸</div>
+          <div class="wp-opt" onclick="setWallpaper('mint')"     id="wp-mint"     style="background:linear-gradient(135deg,#d4f5e0,#b8e8c8)">🍃</div>
+          <div class="wp-opt" onclick="setWallpaper('lavender')" id="wp-lavender" style="background:linear-gradient(135deg,#e8d5f5,#d4b8e8)">💜</div>
+          <div class="wp-opt" onclick="setWallpaper('sunset')"   id="wp-sunset"   style="background:linear-gradient(135deg,#ffd1a0,#ffb3b3)">🌅</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">Media</div>
+    <div class="set-card">
+      <div class="toggle-row" style="border:none;">
+        <div class="srl"><div class="sic ic2">🔗</div>
+          <div><div class="slbl">Link Previews</div><div class="ssub">Show URL previews</div></div></div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="togLink" checked onchange="savePref('chat_link',this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <button class="btn-p" onclick="saveChatSettings()">Save Changes 🌸</button>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<div class="screen" id="aboutScreen">
+  <div class="seth">
+    <div class="back" onclick="go('settingsScreen')">←</div>
+    <div class="set-title">About Pinglet 🌸</div>
+  </div>
+  <div class="setb">
+    <div class="set-card about-hero">
+      <img src="assets/header.png" class="about-logo" alt="Pinglet"
+        onerror="this.outerHTML='<div style=\'font-size:48px;text-align:center;\'>🩷</div>'">
+      <div class="about-ver">Version 1.0.0</div>
+      <div class="about-tagline">connect in a ping ♡</div>
+    </div>
+    <div class="set-card">
+      <div class="sr" onclick="openLink('#')">
+        <div class="srl"><div class="sic ic3">📄</div>
+          <div><div class="slbl">Privacy Policy</div><div class="ssub">How we use your data</div></div></div>
+        <div class="chev">›</div>
+      </div>
+      <div class="sr" style="border:none;" onclick="openLink('#')">
+        <div class="srl"><div class="sic ic1">📋</div>
+          <div><div class="slbl">Terms of Service</div><div class="ssub">Usage agreements</div></div></div>
+        <div class="chev">›</div>
+      </div>
+    </div>
+    <div class="set-card">
+      <div style="padding:16px 17px;text-align:center;">
+        <div class="slbl" style="margin-bottom:6px;">Built with 💗</div>
+        <div class="ssub" style="line-height:1.8;">Firebase · Glassmorphism<br>Gaegu Font · Pure CSS Animations</div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:13px;color:var(--muted);padding:4px 0 8px;">© 2025 Pinglet. Made with 🌸</div>
+  </div>
+</div>
+
+<!-- ══ CHAT MENU (⋮) ══ -->
+<div class="mo" id="userMenuModal" onclick="closeUserMenuOut(event)">
+  <div class="ms">
+    <div class="mh"></div>
+    <div class="mt2" id="userMenuTitle">Options</div>
+    <button class="btn-g danger-opt" id="userMenuActionBtn" onclick="confirmMenuAction()">Leave Group</button>
+    <button class="btn-g" id="userMenuJoinBtn" onclick="confirmJoinFromMenu()" style="display:none;">Join User</button>
+    <button class="btn-g" onclick="closeUserMenu()">Cancel</button>
+  </div>
+</div>
+
+<!-- ══ ADD USER TO GROUP ══ -->
+<div class="mo add-user-modal" id="addUserModal" onclick="closeAddUserModalOut(event)">
+  <div class="ms add-user-sheet">
+    <div class="mh"></div>
+    <div class="mt2">Add User to Group</div>
+    <div class="fg">
+      <label class="fl-label">Username or Email</label>
+      <input type="text" class="gi" id="addUserInput" placeholder="type username or email" onkeydown="if(event.key==='Enter'){submitAddUserToGroup()}">
+    </div>
+    <button class="btn-p" onclick="submitAddUserToGroup()">Add User</button>
+    <button class="btn-g" onclick="closeAddUserModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- ══ CONFIRM DIALOG ══ -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box glass-card">
+    <div class="confirm-icon" id="confirmIcon">⚠️</div>
+    <div class="confirm-title" id="confirmTitle">Are you sure?</div>
+    <div class="confirm-msg" id="confirmMsg">This action cannot be undone.</div>
+    <div class="confirm-btns">
+      <button class="btn-g" style="margin-top:0;" onclick="closeConfirm()">Cancel</button>
+      <button class="confirm-ok" onclick="runConfirm()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ IMAGE LIGHTBOX ══ -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">✕</div>
+  <img id="lightboxImg" src="" alt="media">
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+</div><!-- /phone -->
+<script src="scripts.js"></script>
+</body>
+</html>
+
+
+
