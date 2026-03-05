@@ -1,58 +1,80 @@
 # 💬 Pinglet
 
-> *Tiny messages, big feelings.* 💕
+> *Connect in a Ping.* 💕
 
-A cozy, cute chat application built with React that transforms everyday conversations into delightful moments. Pinglet brings warmth and joy to digital messaging with its soft aesthetics, friendly interface, and heartfelt design philosophy.
+A cozy, cute chat application built with vanilla HTML, CSS, and JavaScript — powered by **Firebase** and packaged as a **desktop app with Electron**. Pinglet transforms everyday conversations into warm, delightful moments with its soft aesthetic and heartfelt design.
 
-![Pinglet Banner](https://via.placeholder.com/800x300/FFB6C1/FFFFFF?text=Pinglet+-+Cute+Chat+App)
+---
 
 ## 🌸 What is Pinglet?
 
-Pinglet (a portmanteau of "ping" + "-let") means **"a tiny, cute message"** - and that's exactly what this app is all about. It's designed for people who want their digital conversations to feel as warm and personal as handwritten notes, with a user interface that sparks joy every time you open it.
+Pinglet (a portmanteau of "ping" + "-let") means **"a tiny, cute message"** — and that's exactly what this app is all about. Designed for people who want their digital conversations to feel as warm and personal as handwritten notes, Pinglet brings cozy vibes to every chat.
+
+---
 
 ## ✨ Features
 
-### 🎨 **Beautiful Design**
-- Soft pink and mint gradient backgrounds
-- Glassmorphism effects with blurred backgrounds
-- Rounded message bubbles with cute emoji avatars
-- Smooth animations and hover effects
-- Responsive design that works on all screen sizes
+### 🎨 Beautiful Design
+- Soft glassmorphism UI with blurred backgrounds and translucent cards
+- 10 switchable color themes: **Whitey, Warm, Mink, Gween, Mlue, Meowllow, Murmle, Mrown, Shockoy, Darky**
+- Floating emoji animations in the background
+- Responsive portrait layout (430×860) locked to a natural phone ratio
 
-### 💬 **Chat Experience**
-- Real-time message sending and receiving
-- Cute typing indicators with bouncing dots
-- Auto-responses from your chat buddy
-- Timestamp display for all messages
-- Smooth auto-scrolling to new messages
+### 💬 Chat Experience
+- Real-time messaging via Firebase Firestore
+- One-on-one and **group chats**
+- Leave & rejoin group chats by name
+- Add members to existing groups
+- Typing indicator with bouncing dots (demo mode)
+- Auto-scrolling to newest messages
+- Link previews (toggleable)
 
-### 🥰 **Adorable Details**
-- Emoji avatars (🌸 for friends, 🌙 for you)
-- Heartfelt placeholder text
-- Soft sound effects (conceptual)
-- Gentle color transitions
-- Love-filled micro-interactions
+### 📸 Media Sharing
+- Send **photos and videos** directly in chat
+- Instant local preview while uploading (optimistic UI)
+- Upload progress bar during media transfers
+- Media hosted on **Cloudinary**
+- Tap images to open in a fullscreen lightbox
 
-### 📱 **User Experience**
-- One-click message sending
-- Enter key support for quick messaging
-- Emoji picker integration
-- Clean, distraction-free interface
-- Accessible design patterns
+### 🎨 Chat Customization
+- **Font size slider** (13px – 22px)
+- **3 bubble styles**: Rounded, Soft, Sharp
+- **6 chat wallpapers**: Default, Stars, Sakura, Mint, Lavender, Sunset
+
+### 👤 Profiles
+- Upload a custom profile photo (stored on Cloudinary)
+- Profile photo syncs across all active conversations in real time
+- Username displayed in chat headers and message sender labels
+
+### 🔒 Account & Safety
+- Firebase Email/Password authentication
+- Block users (hidden from chat list, cannot be opened)
+- Delete a one-on-one conversation from your account
+- Demo/offline mode with local simulated replies when Firebase is unavailable
+
+---
 
 ## 🛠 Tech Stack
 
-- **Frontend**: React 18+ with Hooks
-- **Styling**: Tailwind CSS with custom gradients
-- **Icons**: Lucide React
-- **Build Tool**: Modern bundler (Vite/Webpack)
-- **Platform**: Desktop (Electron) & Web compatible
+| Layer | Technology |
+|-------|------------|
+| UI | Vanilla HTML5, CSS3 (custom properties + glassmorphism) |
+| Logic | Vanilla JavaScript (ES Modules via dynamic import) |
+| Font | [Gaegu](https://fonts.google.com/specimen/Gaegu) (Google Fonts) |
+| Realtime DB | Firebase Firestore v10 |
+| Auth | Firebase Authentication (Email/Password) |
+| Media Storage | Cloudinary (unsigned upload preset) |
+| Desktop | Electron (portrait-locked window, cross-platform icons) |
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 16+ 
-- npm or yarn package manager
+- Node.js 16+
+- npm or yarn
+- A Firebase project with Firestore + Email/Password Auth enabled
+- A Cloudinary account with an **unsigned upload preset**
 
 ### Installation
 
@@ -65,136 +87,134 @@ Pinglet (a portmanteau of "ping" + "-let") means **"a tiny, cute message"** - an
 2. **Install dependencies**
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
-3. **Start the development server**
+3. **Configure Firebase**
+
+   Open `scripts.js` and replace the `firebaseConfig` object with your own project credentials:
+   ```js
+   const firebaseConfig = {
+     apiKey: "YOUR_API_KEY",
+     authDomain: "YOUR_PROJECT.firebaseapp.com",
+     projectId: "YOUR_PROJECT_ID",
+     storageBucket: "YOUR_PROJECT.firebasestorage.app",
+     messagingSenderId: "YOUR_SENDER_ID",
+     appId: "YOUR_APP_ID"
+   };
+   ```
+
+4. **Configure Cloudinary**
+
+   In `scripts.js`, set your Cloudinary credentials:
+   ```js
+   const CLOUDINARY_CLOUD_NAME = 'your_cloud_name';
+   const CLOUDINARY_UPLOAD_PRESET = 'your_unsigned_preset';
+   ```
+
+5. **Run in the browser**
+
+   Simply open `index.html` in your browser, or serve it locally:
    ```bash
-   npm start
-   # or
-   yarn start
+   npx serve .
    ```
 
-4. **Open your browser**
-   Navigate to `http://localhost:3000` to see Pinglet in action! 💖
+6. **Run as a desktop app**
+   ```bash
+   npm run electron
+   # or
+   npx electron .
+   ```
 
-### Building for Production
-
-```bash
-npm run build
-# or
-yarn build
-```
-
-### Electron Desktop App (Optional)
-
-To run Pinglet as a desktop application:
-
-```bash
-npm install electron --save-dev
-npm run electron
-```
+---
 
 ## 📂 Project Structure
 
 ```
 pinglet/
-├── src/
-│   ├── components/
-│   │   └── PingletApp.jsx     # Main chat component
-│   ├── styles/
-│   │   └── globals.css        # Custom CSS
-│   ├── assets/
-│   │   └── logo.png          # Pinglet logo
-│   └── App.js                # Root component
-├── public/
-│   ├── index.html
-│   └── favicon.ico           # Cute ping icon
+├── assets/
+│   ├── header.png        # Pinglet logo
+│   ├── icon.ico          # Windows app icon
+│   ├── icon.icns         # macOS app icon
+│   └── icon.png          # Linux / fallback icon
+├── index.html            # Main UI (all screens)
+├── styles.css            # Themes, components, animations
+├── scripts.js            # All app logic (Firebase, chat, settings)
+├── main.js               # Electron main process
+├── preload.js            # Electron preload (optional, for security)
 ├── package.json
 └── README.md
 ```
 
-## 🎨 Design Philosophy
+---
 
-Pinglet is built on the principle that **digital communication should feel human, warm, and joyful**. Every design decision prioritizes:
+## 🖥 Electron Details
 
-- **Emotional Connection**: Colors and animations that evoke happiness
-- **Simplicity**: Clean interface without overwhelming features  
-- **Accessibility**: Readable text, good contrast, intuitive navigation
-- **Delight**: Small touches that make users smile
-- **Comfort**: Familiar chat patterns with a cozy twist
+Pinglet runs as a **portrait-locked desktop window** (430×860) using Electron. Key behaviors:
 
-## 🌈 Color Palette
+- `autoHideMenuBar: true` — clean, app-like feel
+- `setAspectRatio()` — maintains phone proportions on resize
+- Platform-aware icons: `.ico` on Windows, `.icns` on macOS, `.png` on Linux
+- macOS dock icon is set programmatically on launch
+- Window re-creates on macOS when the dock icon is clicked (standard macOS behavior)
 
-| Color | Hex Code | Usage |
-|-------|----------|-------|
-| Blush Pink | `#FFB6C1` | Primary accent, buttons |
-| Soft Mint | `#A8E6CF` | Secondary accent, highlights |
-| Cloud White | `#FAFAFA` | Backgrounds, message bubbles |
-| Rose Gradient | `#F472B6` → `#FB7185` | Send buttons, active states |
-| Warm Gray | `#6B7280` | Text, subtle elements |
+---
 
-## 🔮 Future Features
+## 🌈 Color Themes
 
-- [ ] **Dark Mode** 🌙 - Cozy nighttime chatting
-- [ ] **Custom Emoji Reactions** 💕 - React to messages with hearts
-- [ ] **Message Themes** 🎨 - Seasonal color schemes
-- [ ] **Sound Effects** 🔊 - Gentle notification sounds
-- [ ] **Message Encryption** 🔒 - Secure conversations
-- [ ] **Group Chats** 👥 - Chat with multiple besties
-- [ ] **File Sharing** 📎 - Send photos and documents
-- [ ] **Status Indicators** 💚 - Online/offline presence
-- [ ] **Message Search** 🔍 - Find old conversations
-- [ ] **Chat Backup** ☁️ - Never lose your memories
+| Theme | Key | Vibe |
+|-------|-----|------|
+| Whitey | `default` | Neutral warm gray |
+| Warm | `warm` | Peachy sunset tones |
+| Mink | `mink` | Soft dusty rose 🌸 |
+| Gween | `green` | Earthy olive & lime |
+| Mlue | `mlue` | Sky & aqua |
+| Meowllow | `yellow` | Sunny golden hour |
+| Murmle | `purple` | Dreamy violet |
+| Mrown | `brown` | Dark mocha (dark mode-ish) |
+| Shockoy | `shockoy` | Teal & emerald |
+| Darky | `black` | True dark mode 🌙 |
+
+---
+
+## 🔮 Roadmap
+
+- [ ] Push notifications
+- [ ] Message reactions (hearts, stars)
+- [ ] Read receipts (double-check marks)
+- [ ] Voice messages
+- [ ] Message search
+- [ ] Seasonal wallpaper packs
+- [ ] End-to-end encryption
+- [ ] Export / backup chat history
+
+---
 
 ## 🤝 Contributing
 
-We welcome contributions that align with Pinglet's cozy, user-friendly philosophy! 
+Contributions are welcome as long as they preserve Pinglet's cozy, user-first philosophy!
 
-### How to Contribute
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Make your changes with care and attention to the aesthetic
+4. Commit: `git commit -m 'Add your feature'`
+5. Push: `git push origin feature/your-feature`
+6. Open a Pull Request with a description of what you built
 
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
-3. **Make your changes** with love and attention to detail
-4. **Test thoroughly** - make sure it's still adorable!
-5. **Commit your changes** (`git commit -m 'Add some amazing feature'`)
-6. **Push to the branch** (`git push origin feature/amazing-feature`)
-7. **Open a Pull Request** with a cute description
+**Guidelines:** Keep soft colors, smooth animations, readable code, and mobile-first thinking.
 
-### Contribution Guidelines
-
-- Keep the **cute aesthetic** - maintain soft colors and friendly design
-- Write **clear, readable code** with helpful comments
-- Test on **multiple screen sizes** - mobile-first approach
-- Follow **accessibility best practices**
-- Add **smooth animations** where appropriate
-- Update **documentation** for new features
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License — see [LICENSE](LICENSE) for details.
 
-## 💖 Acknowledgments
-
-- **Design Inspiration**: Cozy coffee shops, handwritten letters, and warm hugs
-- **Color Theory**: Pastel aesthetics and cottagecore vibes
-- **Typography**: Rounded, friendly fonts that feel like a warm smile
-- **Animation**: Gentle, delightful micro-interactions
-
-## 🌟 Support
-
-If you love Pinglet, please:
-- ⭐ **Star this repository**
-- 🐛 **Report bugs** through GitHub Issues
-- 💡 **Suggest features** that would make chatting even cozier
-- 💕 **Share with friends** who appreciate cute design
+---
 
 ## 📞 Contact
 
-- **Developer**: Winona B. Laher
-- **Email**: laherwinonab@gmail.com
-- **Portfolio**: [[yourwebsite.com](https://yourwebsite.com](https://winonablaherportfolio.42web.io/))
+- **Developer:** Winona B. Laher
+- **Email:** laherwinonab@gmail.com
+- **Portfolio:** [winonablaherportfolio.42web.io](https://winona-s-portfolio.vercel.app/)
 
 ---
 
@@ -202,19 +222,8 @@ If you love Pinglet, please:
 
 **Made with 💖 by someone who believes every message should spark joy**
 
-*Pinglet v1.0 - Where every ping feels special* ✨
+*Pinglet v1.0 — Where every ping feels special* ✨
 
 [⬆ Back to Top](#-pinglet)
 
 </div>
-```
-
-This README includes everything you need! 🎉 It covers:
-
-- **Beautiful branding** with the Pinglet story
-- **Complete setup instructions** 
-- **Technical details** for developers
-- **Design philosophy** explaining the cute aesthetic
-- **Future roadmap** with exciting features
-- **Contribution guidelines** to maintain the vibe
-- **Professional structure** while keeping it friendly
